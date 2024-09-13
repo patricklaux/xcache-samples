@@ -9,26 +9,22 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>xcache-samples-base</artifactId>
+    <artifactId>xcache-samples-test</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.igeeksky.xcache</groupId>
-            <artifactId>xcache-spring-boot-starter</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.igeeksky.xcache</groupId>
+            <artifactId>xcache-extension-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>com.igeeksky.xcache</groupId>
             <artifactId>xcache-samples-domain</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!--        <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-tx</artifactId>
-                </dependency>-->
     </dependencies>
 
 </project>

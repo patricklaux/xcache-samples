@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>xcache-samples-base</artifactId>
+    <artifactId>xcache-samples-spring-annotation</artifactId>
 
     <dependencies>
         <dependency>
@@ -17,18 +17,18 @@
             <artifactId>xcache-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.igeeksky.xcache</groupId>
+            <artifactId>xcache-spring-adapter-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>com.igeeksky.xcache</groupId>
             <artifactId>xcache-samples-domain</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!--        <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-tx</artifactId>
-                </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

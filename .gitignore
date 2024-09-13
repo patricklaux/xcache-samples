@@ -1,38 +1,52 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
-
-### Eclipse ###
+### STS ###
 .apt_generated
-.classpath
-.factorypath
-.project
-.settings
 .springBeans
 .sts4-cache
 
+### IntelliJ IDEA ###
+*.iws
+*.iml
+*.ipr
+.idea/
+idea/
+
+### eclipse ignore ###
+Servers/
+.settings/
+.metadata/
+.project
+.classpath
+.factorypath
+.externalToolBuilers/
+
 ### NetBeans ###
 /nbproject/private/
+/build/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+### maven ignore ###
+bin/
+logs/
+target/
+*.war
+*.zip
+*.tar
+*.tar.gz
+.flattened-pom.xml
 
-### Mac OS ###
+### gradle ignore ###
+.gradle
+
+### system ignore ###
 .DS_Store
+Thumbs.db
+
+### temp ignore ###
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp

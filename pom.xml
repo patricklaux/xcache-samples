@@ -10,13 +10,13 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.0</revision>
-        <xcache.version>0.9.13</xcache.version>
+        <xcache.version>0.9.15</xcache.version>
+        <revision>${xcache.version}</revision>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <maven.flatten.version>1.1.0</maven.flatten.version>
         <maven.compiler.version>3.13.0</maven.compiler.version>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <maven.flatten.version>1.1.0</maven.flatten.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -26,12 +26,18 @@
                 <groupId>com.igeeksky.xcache</groupId>
                 <artifactId>xcache-dependencies</artifactId>
                 <version>${xcache.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <modules>
         <module>xcache-samples-base</module>
+        <module>xcache-samples-annotation</module>
+        <module>xcache-samples-test</module>
+        <module>xcache-samples-domain</module>
+        <module>xcache-samples-spring-annotation</module>
     </modules>
 
     <build>
@@ -69,6 +75,7 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                     <encoding>${maven.compiler.encoding}</encoding>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
         </plugins>
