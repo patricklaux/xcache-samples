@@ -55,14 +55,14 @@ public class UserControllerTest {
 
     @Test
     void getUsers() {
-        Response<Void> clear = clear();
-        Assertions.assertEquals(Response.ok(), clear);
+        clear();
 
         User Jack1 = createUser("{\"name\":\"Jack1\",\"age\":18}").getData();
         User Jack2 = createUser("{\"name\":\"Jack2\",\"age\":18}").getData();
         User Jack3 = createUser("{\"name\":\"Jack3\",\"age\":18}").getData();
         Map<Long, User> created = Map.of(Jack1.getId(), Jack1, Jack2.getId(), Jack2, Jack3.getId(), Jack3);
 
+        // 第一次调用时，缓存缺少 4,5 的数据，方法执行
         String url = "/user/get/list?ids=1,2,3,4,5";
         Response<Map<Long, User>> response = getUsers(url);
         System.out.printf("%s : %s\n", "getUsers", response);
@@ -89,8 +89,7 @@ public class UserControllerTest {
 
     @Test
     void updateUser() {
-        Response<Void> clear = clear();
-        Assertions.assertEquals(Response.ok(), clear);
+        clear();
 
         User user = createUser("{\"name\":\"Jack5\",\"age\":18}").getData();
         user.setAge(20);
@@ -102,8 +101,7 @@ public class UserControllerTest {
 
     @Test
     void updateUsers() {
-        Response<Void> clear = clear();
-        Assertions.assertEquals(Response.ok(), clear);
+        clear();
 
         User Jack6 = createUser("{\"name\":\"Jack6\",\"age\":18}").getData();
         User Jack7 = createUser("{\"name\":\"Jack7\",\"age\":18}").getData();
@@ -145,6 +143,7 @@ public class UserControllerTest {
     void deleteUsers() {
         clear();
 
+        // 创建用户
         User user10 = createUser("{\"name\":\"Jack10\",\"age\":18}").getData();
         User user11 = createUser("{\"name\":\"Jack11\",\"age\":18}").getData();
         User user12 = createUser("{\"name\":\"Jack12\",\"age\":18}").getData();
@@ -153,55 +152,102 @@ public class UserControllerTest {
         Long user11Id = user11.getId();
         Long user12Id = user12.getId();
 
+        // 创建用户后查询，用户不为空
         Assertions.assertEquals(user10, getUser(user10Id).getData());
         Assertions.assertEquals(user11, getUser(user11Id).getData());
         Assertions.assertEquals(user12, getUser(user12Id).getData());
 
+        // 删除用户
         HttpRequest request = createDeleteRequest(String.format("/user/delete/list?ids=%s,%s,%s", user10Id, user11Id, user12Id));
         byte[] body = sendAndReceive(request);
         Response<Void> response = RESPONSE_VOID_CODEC.decode(body);
         Assertions.assertEquals(Response.ok(), response);
 
+        // 删除用户后再次查询，应该返回 null
         Assertions.assertNull(getUser(user10Id).getData());
         Assertions.assertNull(getUser(user11Id).getData());
         Assertions.assertNull(getUser(user12Id).getData());
     }
 
+    /**
+     * 发送获取用户请求
+     *
+     * @param id 用户ID
+     * @return 包含用户信息的响应对象，类型为 {@code Response<User>}，其中 User 为获取到的用户信息
+     */
     private static Response<User> getUser(long id) {
         String url = "/user/get/" + id;
         byte[] body = sendAndReceive(createGetRequest(url));
         return RESPONSE_USER_CODEC.decode(body);
     }
 
+    /**
+     * 发送获取用户列表请求
+     *
+     * @param url 请求URL，包含查询参数，如："/user/get/list?ids=1,2,3"
+     * @return 包含用户列表的响应对象，类型为 {@code Response<Map<Long, User>>}，其中 Map 的键为用户ID，值为用户信息
+     */
     private static Response<Map<Long, User>> getUsers(String url) {
         byte[] body = sendAndReceive(createGetRequest(url));
         return RESPONSE_MAP_CODEC.decode(body);
     }
 
+    /**
+     * 发送创建用户请求
+     *
+     * @param user 用户信息(JSON String)
+     * @return 包含用户信息的响应对象，类型为 {@code Response<User>}，其中 User 为创建的用户信息
+     */
     private static Response<User> createUser(String user) {
+        // 创建用户请求的URL路径
         String url = "/user/create";
+        // 发送请求并接收响应，请求体即为用户信息字符串，经过序列化后发送
         byte[] body = sendAndReceive(createPostRequest(url, user));
+        // 解码响应体，返回包含用户信息的响应对象
         return RESPONSE_USER_CODEC.decode(body);
     }
 
+    /**
+     * 发送更新用户请求
+     *
+     * @param user 用户信息(JSON String)
+     * @return 包含更新后的用户信息的响应对象，类型为 {@code Response<User>}，其中 User 为更新后的用户信息
+     */
     private static Response<User> updateUser(String user) {
         String url = "/user/update";
         byte[] body = sendAndReceive(createPostRequest(url, user));
         return RESPONSE_USER_CODEC.decode(body);
     }
 
+    /**
+     * 发送删除用户请求
+     *
+     * @param id 用户ID
+     * @return 包含删除操作结果的响应对象，类型为 {@code Response<Void>}
+     */
     private static Response<Void> deleteUser(Long id) {
         String url = "/user/delete/" + id;
         byte[] body = sendAndReceive(createDeleteRequest(url));
         return RESPONSE_VOID_CODEC.decode(body);
     }
 
+    /**
+     * 清空数据
+     *
+     * @return 包含清空操作结果的响应对象，类型为 {@code Response<Void>}
+     */
     private static Response<Void> clear() {
         String url = "/user/clear";
         byte[] body = sendAndReceive(createDeleteRequest(url));
         return RESPONSE_VOID_CODEC.decode(body);
     }
 
+    /**
+     * 创建GET请求
+     *
+     * @param url 请求URL路径
+     * @return HttpRequest对象，用于发送GET请求
+     */
     private static HttpRequest createGetRequest(String url) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(HOST + url))
@@ -209,6 +255,12 @@ public class UserControllerTest {
                 .build();
     }
 
+    /**
+     * 创建DELETE请求
+     *
+     * @param url 请求URL路径
+     * @return HttpRequest对象，用于发送DELETE请求
+     */
     private static HttpRequest createDeleteRequest(String url) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(HOST + url))
@@ -216,6 +268,13 @@ public class UserControllerTest {
                 .build();
     }
 
+    /**
+     * 创建POST请求
+     *
+     * @param url  请求URL路径
+     * @param body 请求体，类型为 JSON格式的字符串
+     * @return HttpRequest对象，用于发送POST请求
+     */
     private static HttpRequest createPostRequest(String url, String body) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(HOST + url))
@@ -224,10 +283,15 @@ public class UserControllerTest {
                 .build();
     }
 
+    /**
+     * 发送HTTP请求并接收响应
+     *
+     * @param request HTTP请求对象
+     * @return 响应体，类型为 byte[]
+     */
     private static byte[] sendAndReceive(HttpRequest request) {
         try {
-            HttpResponse<byte[]> response = CLIENT.send(request, RESPONSE_HANDLER);
-            return response.body();
+            return CLIENT.send(request, RESPONSE_HANDLER).body();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
