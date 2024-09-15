@@ -2,8 +2,6 @@ package com.igeeksky.xcache.samples.annotation;
 
 import com.igeeksky.xcache.samples.Response;
 import com.igeeksky.xcache.samples.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +18,9 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
     private final UserService userService;
 
     public UserController(UserService userService) {
-        log.info("UserController init...");
         this.userService = userService;
     }
 
