@@ -22,13 +22,29 @@
         </dependency>
         <dependency>
             <groupId>com.igeeksky.xcache</groupId>
-            <artifactId>xcache-samples-domain</artifactId>
+            <artifactId>xcache-samples-core</artifactId>
             <version>${revision}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.5.15</version>
+                <configuration>
+                    <mainClass>com.igeeksky.xcache.samples.annotation.AnnotationApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

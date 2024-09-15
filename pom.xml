@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
 
     <properties>
-        <xcache.version>0.9.15</xcache.version>
-        <revision>${xcache.version}</revision>
+        <xcache.version>0.9.17</xcache.version>
+        <revision>0.9.17</revision>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.flatten.version>1.1.0</maven.flatten.version>
@@ -36,7 +36,7 @@
         <module>xcache-samples-base</module>
         <module>xcache-samples-annotation</module>
         <module>xcache-samples-test</module>
-        <module>xcache-samples-domain</module>
+        <module>xcache-samples-core</module>
         <module>xcache-samples-spring-annotation</module>
     </modules>
 

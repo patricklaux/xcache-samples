@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.igeeksky.xcache.extension.jackson.JacksonCodec;
-import com.igeeksky.xcache.samples.domain.Response;
-import com.igeeksky.xcache.samples.domain.User;
+import com.igeeksky.xcache.samples.Response;
+import com.igeeksky.xcache.samples.User;
 import com.igeeksky.xtool.core.json.SimpleJSON;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -64,13 +64,18 @@ public class UserControllerTest {
         Map<Long, User> created = Map.of(Jack1.getId(), Jack1, Jack2.getId(), Jack2, Jack3.getId(), Jack3);
 
         String url = "/user/get/list?ids=1,2,3,4,5";
-        byte[] body = sendAndReceive(createGetRequest(url));
-        Response<Map<Long, User>> response = RESPONSE_MAP_CODEC.decode(body);
+        Response<Map<Long, User>> response = getUsers(url);
         System.out.printf("%s : %s\n", "getUsers", response);
 
         Map<Long, User> data = response.getData();
         Assertions.assertEquals(3, data.size());
         Assertions.assertEquals(created, data);
+
+        // 第二次调用时，缓存全部命中，方法不执行
+        Response<Map<Long, User>> response2 = getUsers(url);
+        Map<Long, User> data2 = response2.getData();
+        Assertions.assertEquals(3, data2.size());
+        Assertions.assertEquals(created, data2);
     }
 
     @Test
@@ -166,6 +171,11 @@ public class UserControllerTest {
         String url = "/user/get/" + id;
         byte[] body = sendAndReceive(createGetRequest(url));
         return RESPONSE_USER_CODEC.decode(body);
+    }
+
+    private static Response<Map<Long, User>> getUsers(String url) {
+        byte[] body = sendAndReceive(createGetRequest(url));
+        return RESPONSE_MAP_CODEC.decode(body);
     }
 
     private static Response<User> createUser(String user) {

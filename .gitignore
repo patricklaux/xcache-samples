@@ -7,7 +7,7 @@
 *.iws
 *.iml
 *.ipr
-.idea/
+.idea/*
 idea/
 
 ### eclipse ignore ###

@@ -9,21 +9,16 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>xcache-samples-test</artifactId>
+    <artifactId>xcache-samples-core</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <groupId>com.igeeksky.xtool</groupId>
+            <artifactId>xtool</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.igeeksky.xcache</groupId>
-            <artifactId>xcache-extension-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.igeeksky.xcache</groupId>
-            <artifactId>xcache-samples-core</artifactId>
-            <version>${revision}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 
