@@ -10,13 +10,15 @@ import org.springframework.stereotype.Service;
 
 /**
  * 用户缓存服务
+ * <p>
+ * Spring Cache 没有 {@code CacheableAll}, {@code CachePutAll}, {@code CacheEvictAll} 这三个注解. <p>
+ * Xcache 完整实现了 Spring cache 接口，因此正常使用 Spring cache 注解即可，并无特别限制. <p>
+ * Xcache 适配 Spring cache 的 cacheManager 名称为 springCacheManager ，如无其它 cacheManager，可以不指定.
  *
  * @author Patrick.Lau
  * @since 1.0.0 2024/9/13
  */
 @Service
-// 如果无其它 cacheManager，可以省略 cacheManager 属性配置
-// @CacheConfig(cacheNames = "user")
 @CacheConfig(cacheNames = "user", cacheManager = "springCacheManager")
 public class UserCacheService {
 
@@ -27,7 +29,7 @@ public class UserCacheService {
     }
 
     /**
-     * 根据用户ID获取单个用户信息
+     * 获取单个用户信息
      *
      * @param id 用户ID
      */
@@ -37,7 +39,7 @@ public class UserCacheService {
     }
 
     /**
-     * 新增用户
+     * 新增用户信息
      *
      * @param user 用户信息
      */

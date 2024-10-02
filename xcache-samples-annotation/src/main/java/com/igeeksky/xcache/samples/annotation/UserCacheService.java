@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 用户缓存服务
@@ -30,15 +32,14 @@ public class UserCacheService {
     }
 
     /**
-     * 根据用户ID获取单个用户信息
+     * 获取单个用户信息
      * <p>
-     * 使用 {@link Cacheable} 注解，对应 V value = cache.get(K key) 方法。
-     * 缓存键：默认采用方法的第一个参数，因为缓存值存在时，此注解将不执行方法，因此键不能从方法返回值中获取。
-     * 缓存值：方法返回值。<p>
-     * 特别注意：方法返回值类型 与 缓存值类型 必须一致，否则将出现类型转换异常。
+     * {@link Cacheable} 注解，对应 {@code V value = cache.get(K key, CacheLoader<K,V> loader) } 方法。
+     * <p>
+     * 如未配置 key 表达式，采用方法的第一个参数作为缓存键；如已配置 key 表达式，解析该表达式提取键.
      *
      * @param id 用户ID
-     * @return 用户信息
+     * @return {@code User} – 用户信息
      */
     @Cacheable
     public User getUser(Long id) {
@@ -46,25 +47,102 @@ public class UserCacheService {
     }
 
     /**
-     * 根据用户ID批量获取用户信息
+     * 获取单个用户信息
+     *
+     * @param id 用户ID
+     * @return {@code Optional<User>} – 用户信息 <br>
+     * 如果检测到方法返回值类型为 {@code Optional}，缓存实现会自动采用 {@code Optional.ofNullable()} 包装返回值.
+     */
+    @Cacheable
+    public Optional<User> getOptionalUser(Long id) {
+        User user = userDao.findUser(id);
+
+        // if (user == null) {
+        //     错误：方法返回值为 Optional 类型时，不建议直接返回 null
+        //     方法返回 null，缓存实现则用 Optional.ofNullable(value) 包装返回值，两者结果将不一致
+        //     return null;
+        // } else {
+        //     return Optional.of(user);
+        // }
+
+        // 正确：使用 Optional.ofNullable(value) 包装可能为空的值
+        return Optional.ofNullable(user);
+    }
+
+    /**
+     * 获取单个用户信息
+     *
+     * @param id 用户ID
+     * @return {@code CompletableFuture<User>} – 用户信息 <br>
+     * 如果检测到方法返回值类型为 {@code CompletableFuture}，缓存实现会自动采用 {@code CompletableFuture.completedFuture()} 包装返回值.
+     */
+    @Cacheable
+    public CompletableFuture<User> getFutureUser(Long id) {
+        User user = userDao.findUser(id);
+
+        // if (user == null) {
+        //     错误：方法返回值为 CompletableFuture 类型时，不建议直接返回 null
+        //     方法返回 null，缓存实现则用 CompletableFuture.completedFuture(value) 包装返回值，两者结果将不一致
+        //     return null;
+        // } else {
+        //     return CompletableFuture.completedFuture(user);
+        // }
+
+        // 正确：使用 CompletableFuture.completedFuture 包装可能为空的值
+        return CompletableFuture.completedFuture(user);
+    }
+
+    /**
+     * 批量获取用户信息
      * <p>
-     * 使用 {@link CacheableAll} 注解，对应 Map results = cache.getAll(Set) 方法。<p>
-     * 缓存的键集：Set 类型，默认采用方法的第一个参数；<p>
-     * 缓存结果集：Map 类型，因此，方法返回值同样必须为 Map 类型。
+     * {@link CacheableAll} 注解，对应 {@code Map<K,V> results = cache.getAll(Set<K> keys, CacheLoader<K,V> loader) }方法.<p>
+     * 缓存的键集：Set 类型。如未配置 keys 表达式，采用方法的第一个参数作为键集；如已配置 keys 表达式，解析该表达式提取键集.<p>
+     * 缓存结果集：Map 类型.
      *
      * @param ids 用户ID集合
-     * @return 用户信息集合
+     * @return {@code Map<Long, User>} – 用户信息集合
      */
     @CacheableAll
     public Map<Long, User> getUsers(Set<Long> ids) {
-        log.info("getUsers: {}", ids);
+        log.debug("getUsers: {}", ids);
         return userDao.findUserList(ids);
     }
 
     /**
-     * 新增用户
+     * 批量获取用户信息
      *
-     * @param user 用户信息
+     * @param ids 用户ID集合
+     * @return {@code Optional<Map<Long, User>>} – 用户信息集合 <br>
+     * 如果检测到方法返回值类型为 {@code Optional}，缓存实现会自动采用 {@code Optional.ofNullable()} 包装返回值.
+     */
+    @CacheableAll
+    public Optional<Map<Long, User>> getOptionalUsers(Set<Long> ids) {
+        log.debug("getOptionalUsers: {}", ids);
+        return Optional.ofNullable(userDao.findUserList(ids));
+    }
+
+    /**
+     * 批量获取用户信息
+     *
+     * @param ids 用户ID集合
+     * @return {@code CompletableFuture<Map<Long, User>>} – 用户信息集合 <br>
+     * 如果检测到方法返回值类型为 {@code CompletableFuture}，缓存实现会自动采用 {@code CompletableFuture.completedFuture()} 包装返回值.
+     */
+    @CacheableAll(keys = "#ids")
+    public CompletableFuture<Map<Long, User>> getFutureUsers(Set<Long> ids) {
+        log.debug("getFutureUsers: {}", ids);
+        return CompletableFuture.completedFuture(userDao.findUserList(ids));
+    }
+
+    /**
+     * 新增用户信息
+     * <p>
+     * {@link CachePut} 注解，对应 {@code cache.put(K key, V value)} 方法.<p>
+     * 如未配置 key 表达式，采用方法的第一个参数作为缓存键；如已配置 key 表达式，解析该表达式提取键.<p>
+     * 如未配置 value 表达式，采用方法返回结果作为缓存值；如已配置 value 表达式，解析该表达式提取值.
+     *
+     * @param user 用户信息（无ID）
+     * @return {@code User} – 用户信息（有ID）
      */
     @CachePut(key = "#result.id")
     public User saveUser(User user) {
@@ -75,16 +153,21 @@ public class UserCacheService {
      * 更新用户信息
      *
      * @param user 用户信息
+     * @return {@code User} – 用户信息
      */
-    @CachePut(key = "#user.id")
+    @CachePut(key = "#user.id", value = "#user")
     public User updateUser(User user) {
         return userDao.update(user);
     }
 
     /**
      * 批量更新用户信息
+     * <p>
+     * {@link CachePutAll} 注解， 对应 {@code cache.putAll(Map<K,V> keyValues) }方法.<p>
+     * 如未配置 keyValues 表达式，默认采用方法返回值；如已配置 keyValues 表达式，解析该表达式提取键值对集合.
      *
-     * @param users 用户信息集合
+     * @param users 用户信息列表
+     * @return {@code Map<Long, User>} – 用户信息集合
      */
     @CachePutAll
     public Map<Long, User> updateUsers(List<User> users) {
@@ -93,6 +176,8 @@ public class UserCacheService {
 
     /**
      * 删除用户信息
+     * <p>
+     * {@link CacheEvict} 注解，对应 {@code cache.evict(K key)} 方法.
      *
      * @param id 用户ID
      */
@@ -103,6 +188,8 @@ public class UserCacheService {
 
     /**
      * 批量删除用户信息
+     * <p>
+     * {@link CacheEvictAll} 注解，对应 {@code cache.evictAll(Set<K> keys) }方法.
      *
      * @param ids 用户ID集合
      */
@@ -113,6 +200,8 @@ public class UserCacheService {
 
     /**
      * 清空数据
+     * <p>
+     * {@link CacheClear} 注解，对应 {@code cache.clear()} 方法.
      */
     @CacheClear
     public void clear() {
