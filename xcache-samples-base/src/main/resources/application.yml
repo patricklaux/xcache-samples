@@ -1,8 +1,3 @@
-spring:
-  threads:
-    virtual:
-      enabled: true
-
 # 说明：
 # 1.除了标注为必填的选项，其他选项均为选填，删除或留空表示使用默认配置；
 # 2.每个配置项均有详细说明，可用 ide 自动提示功能快速查看相关描述信息。
@@ -13,10 +8,10 @@ xcache:
     - id: t0 # 模板ID （必填）
       first: # 一级缓存配置
         provider: caffeine # 缓存存储提供者实例 id（内嵌缓存默认值：caffeine）
-        store-type: EMBED # 缓存存储类型，xcache 根据类型自动填充默认配置（一级缓存默认值：embed）
+        store-type: EMBED # 缓存存储类型，xcache 根据类型自动填充默认配置（一级缓存默认值：EMBED）
       second: # 二级缓存配置
-        provider: none # 缓存存储提供者实例 id（外部缓存默认值：lettuce）
-        store-type: EXTRA # 缓存存储类型，xcache 根据类型自动填充默认配置（二级缓存默认值：extra）
-  cache: # 缓存个性配置
+        provider: NONE # 缓存存储提供者实例 id（外部缓存默认值：lettuce）
+        store-type: EXTRA # 缓存存储类型，xcache 根据类型自动填充默认配置（二级缓存默认值：EXTRA）
+  cache: # 缓存实例个性配置
     - name: user # 缓存名称
       template-id: t0 # 指定使用的模板（默认值：t0，对应属性：xcache.template[i].id）

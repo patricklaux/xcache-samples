@@ -5,6 +5,7 @@ import com.igeeksky.xcache.samples.User;
 import com.igeeksky.xcache.samples.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,12 @@ import java.util.concurrent.CompletableFuture;
  * @since 1.0.0 2024/9/13
  */
 @Service
+@Import({UserDao.class})
+// 此类中使用了多个 name 为 "user" 的缓存方法注解，因此在此统一配置公共参数。
 @CacheConfig(name = "user", keyType = Long.class, valueType = User.class)
 public class UserCacheService {
 
-    private final static Logger log = LoggerFactory.getLogger(UserCacheService.class);
+    private static final Logger log = LoggerFactory.getLogger(UserCacheService.class);
 
     private final UserDao userDao;
 
@@ -57,13 +60,8 @@ public class UserCacheService {
     public Optional<User> getOptionalUser(Long id) {
         User user = userDao.findUser(id);
 
-        // if (user == null) {
-        //     错误：方法返回值为 Optional 类型时，不建议直接返回 null
-        //     方法返回 null，缓存实现则用 Optional.ofNullable(value) 包装返回值，两者结果将不一致
-        //     return null;
-        // } else {
-        //     return Optional.of(user);
-        // }
+        // 错误：方法返回值为 Optional 类型时，当用户不存在，直接返回 null
+        // return user == null ? null : Optional.of(user);
 
         // 正确：使用 Optional.ofNullable(value) 包装可能为空的值
         return Optional.ofNullable(user);
@@ -80,13 +78,8 @@ public class UserCacheService {
     public CompletableFuture<User> getFutureUser(Long id) {
         User user = userDao.findUser(id);
 
-        // if (user == null) {
-        //     错误：方法返回值为 CompletableFuture 类型时，不建议直接返回 null
-        //     方法返回 null，缓存实现则用 CompletableFuture.completedFuture(value) 包装返回值，两者结果将不一致
-        //     return null;
-        // } else {
-        //     return CompletableFuture.completedFuture(user);
-        // }
+        // 错误：方法返回值为 CompletableFuture 类型时，当用户不存在，直接返回 null
+        // return user == null ? null : CompletableFuture.completedFuture(user);
 
         // 正确：使用 CompletableFuture.completedFuture 包装可能为空的值
         return CompletableFuture.completedFuture(user);

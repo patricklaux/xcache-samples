@@ -34,8 +34,11 @@ public class UserCacheService {
      * 根据用户ID获取单个用户信息
      *
      * @param id 用户ID
+     * @return 用户信息
      */
     public User getUser(Long id) {
+        // 1. 首先查询缓存，如果缓存命中，则直接返回缓存数据；
+        // 2. 如果缓存未命中，则调用 cacheLoader 从数据源加载数据。
         return cache.get(id, cacheLoader);
     }
 
@@ -43,18 +46,23 @@ public class UserCacheService {
      * 根据用户ID批量获取用户信息
      *
      * @param ids 用户ID集合
+     * @return 用户信息集合
      */
     public Map<Long, User> getUsers(Set<Long> ids) {
+        // 1. 首先查询缓存，如果缓存全部命中，则直接返回缓存数据；
+        // 2. 如果缓存全部未命中或部分命中，则调用 cacheLoader 从数据源加载未命中数据。
         return cache.getAll(ids, this.cacheLoader);
     }
 
     /**
      * 新增用户
      *
-     * @param user 用户信息
+     * @param user 新用户信息
+     * @return 保存到数据库后返回的用户信息
      */
     public User saveUser(User user) {
         User created = userDao.save(user);
+        // 将新增用户信息写入缓存
         cache.put(user.getId(), created);
         return created;
     }
@@ -62,22 +70,30 @@ public class UserCacheService {
     /**
      * 更新用户信息
      *
-     * @param user 用户信息
+     * @param user 待更新的用户信息
+     * @return 保存到数据库后返回的用户信息
      */
     public User updateUser(User user) {
         User updated = userDao.update(user);
+        // 将更新后的用户信息写入缓存
         cache.put(user.getId(), updated);
+        // 如果为了更好地保持数据一致性，这里可选择直接删除缓存数据，后续查询时再从数据源加载
+        // cache.evict(user.getId());
         return updated;
     }
 
     /**
      * 批量更新用户信息
      *
-     * @param users 用户信息集合
+     * @param users 待更新的用户信息集合
+     * @return 保存到数据库后返回的用户信息集合
      */
     public Map<Long, User> updateUsers(List<User> users) {
         Map<Long, User> updates = userDao.batchUpdate(users);
+        // 将更新后的用户信息写入缓存
         cache.putAll(updates);
+        // 如果为了更好地保持数据一致性，这里可选择直接删除缓存数据，后续查询时再从数据源加载
+        // cache.evictAll(updates.keySet());
         return updates;
     }
 
@@ -88,6 +104,7 @@ public class UserCacheService {
      */
     public void deleteUser(Long id) {
         userDao.delete(id);
+        // 删除缓存数据
         cache.evict(id);
     }
 
@@ -98,6 +115,7 @@ public class UserCacheService {
      */
     public void deleteUsers(Set<Long> ids) {
         userDao.batchDelete(ids);
+        // 批量删除缓存数据
         cache.evictAll(ids);
     }
 
@@ -106,11 +124,14 @@ public class UserCacheService {
      */
     public void clear() {
         userDao.clear();
+        // 清空缓存数据
         cache.clear();
     }
 
     /**
-     * 内部类实现 CacheLoader
+     * CacheLoader 实现类
+     * <p>
+     * 用于数据回源操作，当缓存中不存在指定数据时，会调用此方法从数据源加载数据。
      *
      * @param userDao
      */

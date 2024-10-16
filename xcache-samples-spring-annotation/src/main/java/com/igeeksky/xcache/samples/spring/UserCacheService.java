@@ -6,7 +6,12 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 用户缓存服务
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0 2024/9/13
  */
 @Service
+@Import(UserDao.class)
 @CacheConfig(cacheNames = "user", cacheManager = "springCacheManager")
 public class UserCacheService {
 
@@ -32,6 +38,7 @@ public class UserCacheService {
      * 获取单个用户信息
      *
      * @param id 用户ID
+     * @return 用户信息
      */
     @Cacheable(key = "#id")
     public User getUser(Long id) {
@@ -39,9 +46,45 @@ public class UserCacheService {
     }
 
     /**
+     * 获取单个用户信息
+     *
+     * @param id 用户ID
+     * @return {@code Optional<User>} – 用户信息
+     */
+    @Cacheable(key = "#id")
+    public Optional<User> getOptionalUser(Long id) {
+        return Optional.ofNullable(userDao.findUser(id));
+    }
+
+    /**
+     * 获取单个用户信息
+     *
+     * @param id 用户ID
+     * @return {@code CompletableFuture<User>} – 用户信息
+     */
+    @Cacheable(key = "#id")
+    public CompletableFuture<User> getFutureUser(Long id) {
+        return CompletableFuture.completedFuture(userDao.findUser(id));
+    }
+
+    /**
+     * 获取单个用户信息
+     *
+     * @param id 用户ID
+     * @return {@code Mono<User>} – 用户信息
+     * <p>
+     * Spring cache 适配 Reactor 的 Mono 类型，因此可以返回 {@code Mono<User>}。
+     */
+    @Cacheable(key = "#id")
+    public Mono<User> getMonoUser(Long id) {
+        return Mono.fromSupplier(() -> userDao.findUser(id));
+    }
+
+    /**
      * 新增用户信息
      *
      * @param user 用户信息
+     * @return 用户信息
      */
     @CachePut(key = "#result.id")
     public User saveUser(User user) {
@@ -52,6 +95,7 @@ public class UserCacheService {
      * 更新用户信息
      *
      * @param user 用户信息
+     * @return 用户信息
      */
     @CachePut(key = "#result.id")
     public User updateUser(User user) {

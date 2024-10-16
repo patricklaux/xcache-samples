@@ -4,8 +4,11 @@ import com.igeeksky.xcache.samples.Response;
 import com.igeeksky.xcache.samples.User;
 import com.igeeksky.xtool.core.collection.CollectionUtils;
 import com.igeeksky.xtool.core.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +21,8 @@ import java.util.Set;
  */
 @Service
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserCacheService userCacheService;
 
@@ -35,6 +40,7 @@ public class UserService {
         try {
             return Response.ok(userCacheService.getUser(id));
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
@@ -54,6 +60,7 @@ public class UserService {
         try {
             return Response.ok(userCacheService.getUsers(ids));
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
@@ -69,6 +76,7 @@ public class UserService {
         try {
             return Response.ok(userCacheService.saveUser(user));
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
@@ -84,6 +92,7 @@ public class UserService {
         try {
             return Response.ok(userCacheService.updateUser(user));
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
@@ -104,6 +113,7 @@ public class UserService {
         try {
             return Response.ok(userCacheService.updateUsers(users));
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
@@ -119,6 +129,7 @@ public class UserService {
             userCacheService.deleteUser(id);
             return Response.ok();
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
@@ -132,13 +143,14 @@ public class UserService {
         }
         for (Long id : ids) {
             if (id == null) {
-                return Response.error("id is null");
+                return Response.error("ids has null element:" + Arrays.toString(ids.toArray()));
             }
         }
         try {
             userCacheService.deleteUsers(ids);
             return Response.ok();
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
@@ -189,6 +201,7 @@ public class UserService {
             userCacheService.clear();
             return Response.ok();
         } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return Response.error(e.getMessage());
         }
     }
