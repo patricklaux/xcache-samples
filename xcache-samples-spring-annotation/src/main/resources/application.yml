@@ -35,7 +35,7 @@ xcache:
         provider: none # CacheRefreshProviderId（默认值：none，不启用缓存刷新）
         params: # 用于扩展实现的自定义参数，map 类型 （如不使用，请删除，否则 spring boot 会提示参数读取异常）
           test: test
-      key-codec: jackson # 用于将键转换成 String（默认值：jackson）
+      key-codec: jackson-spring # 用于将键转换成 String（默认值：jackson，这里需改成适配 spring 的 jackson-spring）
       contains-predicate: # 用于判断数据源是否存在相应数据（默认值：none，需自行实现并添加到 spring 容器）
       first: # 一级缓存配置
         store-type: EMBED # 根据是内嵌缓存还是外部缓存，自动填充不同的默认配置（一级缓存默认设定为：EMBED）
@@ -62,7 +62,7 @@ xcache:
         enable-group-prefix: true # 是否添加 group 作为前缀（默认值：true，仅适用于外部缓存）
         enable-random-ttl: true # 是否使用随机存活时间（默认值：true， 使用随机存活时间，避免大规模的 key 集中过期）
         enable-null-value: true # 是否允许保存空值（默认值：true）
-        value-codec: jackson # 用于值对象的序列化（外部缓存默认值：jackson）
+        value-codec: jackson-spring # 用于值对象的序列化（外部缓存默认值：jackson，这里需改成适配 spring 的 jackson-spring）
         value-compressor: # 值压缩配置，如需启用压缩，必须启用序列化（先序列化后压缩）
           provider: none # CompressorProviderId（默认值：none，不启用数据压缩）
           nowrap: false # 是否不携带封装信息（默认值：false，此配置对于 DeflaterCompressor 有效）

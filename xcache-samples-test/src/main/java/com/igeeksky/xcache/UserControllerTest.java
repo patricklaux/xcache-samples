@@ -48,9 +48,16 @@ public class UserControllerTest {
 
         Response<User> createResponse = createUser("{\"name\":\"Jack0\",\"age\":18}");
         User created = createResponse.getData();
+
         Response<User> response = getUser(created.getId());
         System.out.printf("%s : %s\n", "getUser", response.getData());
         Assertions.assertEquals(created, response.getData());
+    }
+
+    @Test
+    void getUserById() {
+        User user = getUser(1L).getData();
+        System.out.printf("%s : %s\n", "getUserById", user);
     }
 
     @Test
