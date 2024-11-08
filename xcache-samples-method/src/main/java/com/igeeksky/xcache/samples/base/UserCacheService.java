@@ -105,7 +105,7 @@ public class UserCacheService {
     public void deleteUser(Long id) {
         userDao.delete(id);
         // 删除缓存数据
-        cache.evict(id);
+        cache.remove(id);
     }
 
     /**
@@ -116,7 +116,7 @@ public class UserCacheService {
     public void deleteUsers(Set<Long> ids) {
         userDao.batchDelete(ids);
         // 批量删除缓存数据
-        cache.evictAll(ids);
+        cache.removeAll(ids);
     }
 
     /**
