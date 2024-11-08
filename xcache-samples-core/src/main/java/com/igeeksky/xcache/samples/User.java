@@ -5,6 +5,8 @@ import com.igeeksky.xtool.core.json.SimpleJSON;
 import java.util.Objects;
 
 /**
+ * 用户实体类
+ *
  * @author Patrick.Lau
  * @since 1.0.0 2024/9/7
  */

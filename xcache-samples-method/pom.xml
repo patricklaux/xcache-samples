@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>xcache-samples-base</artifactId>
+    <artifactId>xcache-samples-method</artifactId>
 
     <dependencies>
         <dependency>

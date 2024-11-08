@@ -1,0 +1,4 @@
+xcache:
+  group: shop # 分组名称 (必填)
+  template: # 公共模板配置 (必填)
+    - id: t0 # 模板ID (必填)

@@ -14,7 +14,7 @@
         <revision>0.9.18</revision>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven.flatten.version>1.1.0</maven.flatten.version>
+        <maven.flatten.version>1.6.0</maven.flatten.version>
         <maven.compiler.version>3.13.0</maven.compiler.version>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,10 +33,10 @@
     </dependencyManagement>
 
     <modules>
-        <module>xcache-samples-base</module>
-        <module>xcache-samples-annotation</module>
-        <module>xcache-samples-test</module>
         <module>xcache-samples-core</module>
+        <module>xcache-samples-test</module>
+        <module>xcache-samples-method</module>
+        <module>xcache-samples-annotation</module>
         <module>xcache-samples-spring-annotation</module>
     </modules>
 
@@ -75,6 +75,7 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                     <encoding>${maven.compiler.encoding}</encoding>
+                    <!--如果注解中需用到方法参数名，需添加此编译选项并设为 true -->
                     <parameters>true</parameters>
                 </configuration>
             </plugin>

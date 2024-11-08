@@ -1,34 +1,21 @@
-# 说明：
-# 1.除了标注为必填的选项，其他选项均为选填，删除或留空表示使用默认配置；
-# 2.每个配置项均有详细说明，可用 ide 自动提示功能快速查看相关描述信息。
-
-xcache:
-  group: shop # 分组名称（必填），主要用于区分不同的应用
-  template: # 公共模板配置（必填），列表类型，可配置一至多个
-    - id: t0 # 模板ID（必填）
-      first: # 一级缓存配置
-        provider: caffeine # 缓存存储提供者实例 id
-        store-type: EMBED # 缓存存储类型，根据类型自动填充默认配置
-        expire-after-write: 3600000 # 数据写入后的存活时间（单位：毫秒）
-        expire-after-access: 300000 # 数据访问后的存活时间（单位：毫秒）
-        enable-random-ttl: true # 是否使用随机存活时间
-        enable-null-value: true # 是否允许保存空值
-      second: # 二级缓存配置
-        provider: lettuce # 使用 id 为 lettuce 的 StoreProvider
-        store-type: EXTRA # 缓存存储类型，根据类型自动填充默认配置
-        expire-after-write: 7200000 # 数据写入后的存活时间（单位：毫秒）
-        enable-random-ttl: true # 是否使用随机存活时间
-        enable-null-value: true # 是否允许保存空值
-  cache: # 缓存实例个性配置，列表类型，可配置零至多个
-    - name: user # 缓存名称，用于区分不同的缓存对象
-      template-id: t0 # 指定使用的模板为 t0（对应属性：xcache.template[i].id）
-  redis: # Redis 配置
-    store: # RedisStoreProvider 配置，列表类型，可配置多个
-      - id: lettuce #  要创建的 RedisStoreProvider 的 id
-        factory: lettuce # 指定使用的 RedisOperatorFactory 的 id
-    lettuce: # Lettuce 客户端配置
-      factories: # 考虑到一个应用可能会使用多套 Redis，因此采用列表类型，可配置多个
-        - id: lettuce # RedisOperatorFactory 唯一标识
-          sentinel: # 哨兵模式配置
-            master-id: mymaster # 哨兵主节点名称
-            nodes: 127.0.0.1:26379, 127.0.0.1:26380, 127.0.0.1:26381 # 哨兵节点列表
+xcache: #【1】Xcache 配置的根节点
+  group: shop #【2】分组名称（必填），主要用于区分不同的应用
+  template: #【3】公共模板配置（必填），列表类型，可配置一至多个
+    - id: t0 #【4】模板ID（必填）
+      first: #【5】一级缓存配置
+        provider: caffeine #【6】使用 id 为 caffeine 的 StoreProvider 作为一级缓存
+      second: #【7】二级缓存配置
+        provider: lettuce #【8】使用 id 为 lettuce 的 StoreProvider 作为二级缓存（即【14】中设定的 id）
+  cache: #【9】缓存个性配置，列表类型，可配置零至多个
+    - name: user #【10】缓存名称，用于区分不同的缓存对象
+      template-id: t0 #【11】指定使用的模板为 t0（即【4】中设定的模板 id）
+  redis: #【12】Redis 配置
+    store: #【13】RedisStoreProvider 配置，列表类型，可配置多个
+      - id: lettuce #【14】要创建的 RedisStoreProvider 的 id
+        factory: lettuce #【15】指定使用的 RedisOperatorFactory 的 id（即【18】中设定的 id）
+    lettuce: #【16】Lettuce 客户端配置
+      factories: #【17】考虑到一个应用可能会使用多套 Redis，因此采用列表类型，可配置多个
+        - id: lettuce #【18】RedisOperatorFactory 唯一标识
+          sentinel: #【19】哨兵模式配置
+            master-id: mymaster #【20】哨兵主节点名称
+            nodes: 127.0.0.1:26379, 127.0.0.1:26380, 127.0.0.1:26381 #【21】哨兵节点列表

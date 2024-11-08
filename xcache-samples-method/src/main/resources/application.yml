@@ -1,0 +1,9 @@
+xcache: #【1】Xcache 配置的根节点
+  group: shop #【2】分组名称（必填），主要用于区分不同的应用
+  template: #【3】公共模板配置（必填），列表类型，可配置一至多个
+    - id: t0 #【4】模板ID（必填）
+      first: #【5】一级缓存配置
+        provider: caffeine #【6】使用 id 为 caffeine 的 StoreProvider 作为一级缓存
+  cache: #【7】缓存个性配置，列表类型，可配置零至多个
+    - name: user #【8】缓存名称，用于区分不同的缓存实例
+      template-id: t0 #【9】指定使用的模板为 t0（即【4】中设定的 id）
