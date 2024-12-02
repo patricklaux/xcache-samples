@@ -24,7 +24,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.igeeksky.xcache</groupId>
-                <artifactId>xcache-dependencies</artifactId>
+                <artifactId>xcache-bom</artifactId>
                 <version>${xcache.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

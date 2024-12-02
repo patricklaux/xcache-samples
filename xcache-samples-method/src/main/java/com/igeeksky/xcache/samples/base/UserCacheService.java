@@ -39,7 +39,7 @@ public class UserCacheService {
     public User getUser(Long id) {
         // 1. 首先查询缓存，如果缓存命中，则直接返回缓存数据；
         // 2. 如果缓存未命中，则调用 cacheLoader 从数据源加载数据。
-        return cache.get(id, cacheLoader);
+        return cache.getOrLoad(id, cacheLoader);
     }
 
     /**
@@ -51,7 +51,7 @@ public class UserCacheService {
     public Map<Long, User> getUsers(Set<Long> ids) {
         // 1. 首先查询缓存，如果缓存全部命中，则直接返回缓存数据；
         // 2. 如果缓存全部未命中或部分命中，则调用 cacheLoader 从数据源加载未命中数据。
-        return cache.getAll(ids, this.cacheLoader);
+        return cache.getAllOrLoad(ids, this.cacheLoader);
     }
 
     /**

@@ -170,11 +170,11 @@ public class UserCacheService {
     /**
      * 删除用户信息
      * <p>
-     * {@link CacheEvict} 注解，对应 {@code cache.evict(K key)} 方法.
+     * {@link CacheRemove} 注解，对应 {@code cache.evict(K key)} 方法.
      *
      * @param id 用户ID
      */
-    @CacheEvict
+    @CacheRemove
     public void deleteUser(Long id) {
         userDao.delete(id);
     }
@@ -182,11 +182,11 @@ public class UserCacheService {
     /**
      * 批量删除用户信息
      * <p>
-     * {@link CacheEvictAll} 注解，对应 {@code cache.evictAll(Set<K> keys) }方法.
+     * {@link CacheRemoveAll} 注解，对应 {@code cache.evictAll(Set<K> keys) }方法.
      *
      * @param ids 用户ID集合
      */
-    @CacheEvictAll
+    @CacheRemoveAll
     public void deleteUsers(Set<Long> ids) {
         userDao.batchDelete(ids);
     }
