@@ -37,7 +37,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.15</version>
+                <version>${spring.boot.version}</version>
                 <configuration>
                     <mainClass>com.igeeksky.xcache.samples.spring.SpringAnnotationApplication</mainClass>
                 </configuration>
