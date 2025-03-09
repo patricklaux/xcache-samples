@@ -89,12 +89,12 @@ public class UserCacheService {
      * @return 保存到数据库后返回的用户信息集合
      */
     public Map<Long, User> updateUsers(List<User> users) {
-        Map<Long, User> updates = userDao.batchUpdate(users);
+        Map<Long, User> updated = userDao.batchUpdate(users);
         // 将更新后的用户信息写入缓存
-        cache.putAll(updates);
+        cache.putAll(updated);
         // 如果为了更好地保持数据一致性，这里可选择直接删除缓存数据，后续查询时再从数据源加载
-        // cache.evictAll(updates.keySet());
-        return updates;
+        // cache.evictAll(updated.keySet());
+        return updated;
     }
 
     /**

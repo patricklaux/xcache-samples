@@ -23,8 +23,9 @@ import java.util.concurrent.CompletableFuture;
  * @author Patrick.Lau
  * @since 1.0.0 2024/9/13
  */
-@Service
 @Import(UserDao.class)
+@Service
+// 适配 Spring cache 的 CacheManager 为 springCacheManager，如 Spring 容器内无其它 CacheManager 对象，可不配置。
 @CacheConfig(cacheNames = "user", cacheManager = "springCacheManager")
 public class UserCacheService {
 

@@ -15,6 +15,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>com.igeeksky.xcache</groupId>
@@ -23,7 +24,6 @@
         <dependency>
             <groupId>com.igeeksky.xcache</groupId>
             <artifactId>xcache-samples-core</artifactId>
-            <version>${revision}</version>
         </dependency>
     </dependencies>
 

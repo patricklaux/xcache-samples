@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Import;
  */
 @Import(UserDao.class)
 @SpringBootApplication(scanBasePackages = "com.igeeksky.xcache.samples")
-public class BaseApplication {
+public class CacheMethodApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BaseApplication.class, args);
+        SpringApplication.run(CacheMethodApplication.class, args);
     }
 
 }

@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- configuration file for LogBack (slf4J implementation)
-See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-through-the-java-loggers/ -->
-<configuration scan="true" scanPeriod="10 seconds" debug="false">
+
+<configuration scan="false" scanPeriod="10 seconds" debug="false">
 
     <contextName>shop</contextName>
-
-    <property name="LOG_HOME" value="/Data/log/shop"/>
-    <property name="APP_NAME" value="shop"/>
-
-    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
-        <resetJUL>true</resetJUL>
-    </contextListener>
-
-    <!-- To enable JMX Management -->
-    <jmxConfigurator/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder charset="UTF-8">
@@ -21,30 +10,7 @@ See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-
         </encoder>
     </appender>
 
-    <appender name="SystemLogService" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${LOG_HOME}/${APP_NAME}_running.log</File>
-        <encoder charset="UTF-8">
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
-        </encoder>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-
-            <MaxHistory>7</MaxHistory>
-        </rollingPolicy>
-    </appender>
-
-    <!-- Uncomment and add your logger here:  -->
-    <logger name="org.springframework.*" level="warn"/>
-    <logger name="org.springframework.jdbc.datasource" level="warn"/>
-    <logger name="io.lettuce.*" level="warn"/>
-    <logger name="com.igeeksky.*" level="debug"/>
-
     <root level="info">
-        <appender-ref ref="SystemLogService"/>
         <appender-ref ref="console"/>
     </root>
 </configuration>

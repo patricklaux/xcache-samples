@@ -19,12 +19,7 @@
         <dependency>
             <groupId>com.igeeksky.xcache</groupId>
             <artifactId>xcache-samples-core</artifactId>
-            <version>${revision}</version>
         </dependency>
-        <!--        <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-tx</artifactId>
-                </dependency>-->
     </dependencies>
 
     <build>
@@ -32,9 +27,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.15</version>
+                <version>${spring.boot.version}</version>
                 <configuration>
-                    <mainClass>com.igeeksky.xcache.samples.base.BaseApplication</mainClass>
+                    <mainClass>com.igeeksky.xcache.samples.base.CacheMethodApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

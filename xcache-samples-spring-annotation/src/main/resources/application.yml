@@ -2,7 +2,7 @@ xcache: #【1】Xcache 配置的根节点
   group: shop #【2】分组名称（必填），主要用于区分不同的应用
   template: #【3】公共模板配置（必填），列表类型，可配置一至多个
     - id: t0 #【4】模板ID（必填）
-      key-codec: jackson-spring #【5】键转为String（需设为适配 Spring cache 的 jackson-spring）
+      key-codec: jackson-spring #【5】键转为 String（需设为适配 Spring cache 的 jackson-spring）
       first: #【6】一级缓存配置
         provider: caffeine #【7】使用 id 为 caffeine 的 StoreProvider 作为一级缓存
       second: #【8】二级缓存配置
@@ -12,12 +12,7 @@ xcache: #【1】Xcache 配置的根节点
     - name: user #【12】缓存名称，用于区分不同的缓存对象
       template-id: t0 #【13】指定使用的模板为 t0（即【4】中设定的 id）
   redis: #【14】Redis 配置
-    store: #【15】RedisStoreProvider 配置，列表类型，可配置多个
-      - id: lettuce #【16】要创建的 RedisStoreProvider 的 id
-        factory: lettuce #【17】指定使用的 RedisOperatorFactory 的 id（即【20】中设定的 id）
-    lettuce: #【18】Lettuce 客户端配置
-      factories: #【19】考虑到一个应用可能会使用多套 Redis，因此采用列表类型，可配置多个
-        - id: lettuce #【20】RedisOperatorFactory 唯一标识
-          sentinel: #【21】哨兵模式配置
-            master-id: mymaster #【22】哨兵主节点名称
-            nodes: 127.0.0.1:26379, 127.0.0.1:26380, 127.0.0.1:26381 #【23】哨兵节点列表
+    lettuce: #【15】Lettuce 配置
+      - id: lettuce #【16】RedisOperatorFactory 唯一标识
+        standalone: #【17】单机模式（或副本集模式）配置
+          node: 127.0.0.1:6379 #【18】节点地址

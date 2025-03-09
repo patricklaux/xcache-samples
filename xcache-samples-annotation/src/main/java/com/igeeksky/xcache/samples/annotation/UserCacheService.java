@@ -20,9 +20,9 @@ import java.util.concurrent.CompletableFuture;
  * @author Patrick.Lau
  * @since 1.0.0 2024/9/13
  */
-@Service
 @Import({UserDao.class})
-// 此类中使用了多个 name 为 "user" 的缓存方法注解，因此在此统一配置公共参数。
+@Service
+// @CacheConfig 统一配置缓存注解公共参数
 @CacheConfig(name = "user", keyType = Long.class, valueType = User.class)
 public class UserCacheService {
 
