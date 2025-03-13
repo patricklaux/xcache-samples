@@ -13,6 +13,6 @@ xcache: #【1】Xcache 配置的根节点
       template-id: t0 #【13】指定使用的模板为 t0（即【4】中设定的 id）
   redis: #【14】Redis 配置
     lettuce: #【15】Lettuce 配置
-      - id: lettuce #【16】RedisOperatorFactory，RedisStoreProvider…… 唯一标识
+      - id: lettuce #【16】RedisOperatorFactory, RedisStoreProvider …… 唯一标识
         standalone: #【17】单机模式（或副本集模式）配置
           node: 127.0.0.1:6379 #【18】节点地址

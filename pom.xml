@@ -10,11 +10,10 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>0.9.23</revision>
+        <revision>1.0.0</revision>
         <junit.version>5.11.4</junit.version>
         <spring.boot.version>3.4.3</spring.boot.version>
         <xcache.version>${revision}</xcache.version>
-        <lettuce.version>6.5.4.RELEASE</lettuce.version>
         <maven.resources.version>3.3.1</maven.resources.version>
         <maven.flatten.version>1.6.0</maven.flatten.version>
         <maven.compiler.source>21</maven.compiler.source>

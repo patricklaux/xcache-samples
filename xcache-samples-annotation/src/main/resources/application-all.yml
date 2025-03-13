@@ -64,7 +64,8 @@ xcache:
           test: test
       third: # 三级缓存配置
         provider: none # StoreProviderId（三级缓存默认值：none）
-        redis-type: STRING # Redis 命令类型（默认：STRING，如无需过期，可设为 HASH）
+        redis-type: HASH # Redis 命令类型（默认：STRING，如无需过期，可设为 HASH）
+        keySequenceSize: 16 # HASH 键序列数量，仅用于 Redis 集群模式，且采用 Redis-Hash 作为数据存储，其它模式下无意义。（默认值：16）
         expire-after-write: 7200000 # 数据写入后的存活时间（外部缓存默认值：7200000 单位：毫秒）
         enable-group-prefix: true # 是否添加 group 作为前缀（默认值：true，仅适用于外部缓存）
         enable-random-ttl: true # 是否使用随机存活时间（默认值：true，避免大量的 key 集中过期）
@@ -90,7 +91,7 @@ xcache:
     core-pool-size: 1 # 定时任务调度器核心线程数，如未配置，则使用 (核心数 / 8)，最小为 1。
   redis: # Redis 配置（如不使用 Redis，可直接删除此配置项；如未配置，则不会生成相应的实例对象）
     lettuce: # Lettuce 客户端配置
-      - id: lettuce # RedisOperatorFactory 唯一标识（默认值：lettuce）
+      - id: lettuce # RedisOperatorFactory, RedisStoreProvider …… 唯一标识（默认值：lettuce）
         batch-size: 10000 # 单批次命令提交数量阈值（默认值：10000）
         metrics: # RedisCacheMetricsProvider 配置
           # 另，Redis StreamPublisher 仅负责发送统计指标信息，统计汇总需用户自行实现

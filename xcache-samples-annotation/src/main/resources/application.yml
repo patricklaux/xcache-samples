@@ -8,6 +8,6 @@ xcache: #【1】 xcache 配置根节点
         provider: lettuce #【8】使用 id 为 lettuce 的 StoreProvider 创建二级缓存实例（即【11】中设定的 id）
   redis: #【9】Redis 配置
     lettuce: #【10】Lettuce 配置
-      - id: lettuce #【11】RedisOperatorFactory 唯一标识
+      - id: lettuce #【11】RedisOperatorFactory, RedisStoreProvider …… 唯一标识（默认值：lettuce）
         standalone: #【12】单机模式（或副本集模式）配置
           node: 127.0.0.1:6379 #【13】节点地址
