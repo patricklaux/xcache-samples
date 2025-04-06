@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.1</revision>
+        <revision>1.0.2</revision>
         <junit.version>5.11.4</junit.version>
         <spring.boot.version>3.4.3</spring.boot.version>
         <xcache.version>${revision}</xcache.version>
